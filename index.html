@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Shop smartphones, laptops, tablets, TVs, audio, gaming, networking, office equipment and electronics accessories at Yite Electronics Store, with home-delivery order requests.">
+  <title>Yite Electronics Store</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="script.js" defer></script>
+</head>
+<body>
+  <div class="top-strip"><span class="top-dot"></span> YITE ELECTRONICS <span class="top-divider">/</span> Better tech for your everyday <span class="top-right">Thoughtful picks · Friendly service</span></div>
+  <header class="site-header">
+    <a class="brand" href="#home" aria-label="Yite Electronics Store home">
+      <span class="brand-mark"><span>Y</span><i>✦</i></span>
+      <span>Yite <strong>Electronics</strong><small>TECH FOR EVERY DAY</small></span>
+    </a>
+    <button class="menu-toggle" id="menuToggle" aria-label="Open navigation" aria-expanded="false"><span></span><span></span></button>
+    <nav class="main-nav" id="mainNav">
+      <a href="#home">Home</a>
+      <a href="#products">Products</a>
+      <a href="#about">About</a>
+      <a href="#contact">Contact</a>
+    </nav>
+    <button class="cart-button" id="cartButton" aria-label="Open shopping cart"><span class="cart-icon">♧</span><span>My bag</span><span id="cartCount" class="cart-count">0</span></button>
+  </header>
+
+  <main>
+    <section class="hero" id="home">
+      <div class="hero-copy">
+        <p class="eyebrow"><span class="eyebrow-line"></span> YOUR NEXT FAVORITE DEVICE</p>
+        <h1>Technology that moves <span>you forward.</span></h1>
+        <p class="hero-text">Shop smartphones, laptops, tablets, TVs, audio devices, gaming gear, networking products, office equipment, home electronics, chargers, cables and more. Request home delivery from Yite Electronics.</p>
+        <div class="hero-actions">
+          <a class="button button-primary" href="#products">Explore collection <span>↗</span></a>
+          <a class="button button-ghost" href="#about"><span class="play-icon">▶</span> Our story</a>
+        </div>
+        <div class="trust-row"><span><b>01</b> Curated essentials</span><span><b>02</b> Made for real life</span></div>
+      </div>
+      <div class="hero-art" aria-label="Featured electronics collection">
+        <div class="hero-orbit orbit-one"></div><div class="hero-orbit orbit-two"></div>
+        <div class="hero-image-card"><img src="https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=900&q=85" alt="" onerror="this.style.display='none'"><div class="hero-image-fallback"><span>Y.</span><small>TECH, REIMAGINED</small></div><div class="image-caption"><span>THE EVERYDAY EDIT</span><b>Good things<br>in your hands.</b></div></div>
+        <div class="floating-chip chip-one"><span class="chip-symbol">✦</span><span><b>Curated for you</b><small>Everyday essentials</small></span></div>
+        <div class="floating-chip chip-two"><span class="chip-symbol">↗</span><span><b>Find your next</b><small>Favorite device</small></span></div>
+        <div class="hero-index"><span>01</span> / 04</div>
+      </div>
+    </section>
+
+    <section class="benefits" aria-label="Store benefits">
+      <div><span class="benefit-icon">✳</span><p><strong>Carefully selected</strong><small>Useful tech, no noise</small></p></div>
+      <div><span class="benefit-icon">↗</span><p><strong>Easy to explore</strong><small>A smoother way to shop</small></p></div>
+      <div><span class="benefit-icon">♡</span><p><strong>Human support</strong><small>Here when you need us</small></p></div>
+      <div><span class="benefit-icon">⌂</span><p><strong>Home delivery</strong><small>Ask us to deliver to your address</small></p></div>
+    </section>
+
+    <section class="products-section section-wrap" id="products">
+      <div class="section-heading">
+        <div><p class="eyebrow"><span class="eyebrow-line"></span> THE COLLECTION</p><h2>Good tech. <span>Good energy.</span></h2><p class="muted">Your everyday upgrades, all in one place.</p></div>
+        <label class="search-box"><span>⌕</span><input id="searchInput" type="search" placeholder="Find something good..." aria-label="Search products"><kbd>⌘ K</kbd></label>
+      </div>
+      <div class="category-row" id="categoryFilters" aria-label="Filter by category">
+        <button class="category-pill active" data-category="All">All products</button>
+        <button class="category-pill" data-category="Phones">Smartphones</button>
+        <button class="category-pill" data-category="Computers">Laptops & Computers</button>
+        <button class="category-pill" data-category="Accessories">Chargers, Cables & Accessories</button>
+        <button class="category-pill" data-category="Audio">Audio</button>
+        <button class="category-pill" data-category="Tablets">Tablets</button>
+        <button class="category-pill" data-category="TV & Home">TV & Home</button>
+        <button class="category-pill" data-category="Gaming">Gaming</button>
+        <button class="category-pill" data-category="Networking">Networking</button>
+        <button class="category-pill" data-category="Office & Cameras">Office & Cameras</button>
+        <button class="category-pill" data-category="Wearables">Smart Wearables</button>
+      </div>
+      <div class="product-grid" id="productGrid" aria-live="polite"></div>
+      <p class="empty-state" id="emptyState" hidden>No products match your search. Try another name or category.</p>
+    </section>
+
+    <section class="promo-band section-wrap">
+      <div><p class="eyebrow">A LITTLE MORE POSSIBLE</p><h2>Make room for what’s next.</h2><p>Tools for your ideas, your work, your playlists, and your everyday.</p></div>
+      <a href="#products" class="button button-light">Browse the collection →</a>
+    </section>
+
+    <section class="about-section section-wrap" id="about">
+      <div class="about-icon"><span class="about-icon-y">Y.</span><span class="about-spark">✳</span><small>TECH FOR EVERY DAY</small></div>
+      <div><p class="eyebrow">A NOTE FROM YITE</p><h2>Less searching. <span>More discovering.</span></h2><p class="muted">The right device can spark a new idea, make a busy day easier, or bring people a little closer. We make finding your next useful thing feel simple, clear, and a bit more delightful.</p><a href="#products" class="text-link">Get to know the collection <span>↗</span></a></div>
+    </section>
+
+    <section class="delivery-banner section-wrap" id="delivery">
+      <div class="delivery-mark">⌂</div>
+      <div><p class="eyebrow">SHOP FROM HOME</p><h2>Your order, delivered to your door.</h2><p>Choose your products, add them to your cart, then enter your name, phone number and delivery address. We will prepare an order message for you to send to Yite Electronics.</p></div>
+      <a href="#products" class="button button-primary">Shop now →</a>
+    </section>
+
+    <section class="contact-section section-wrap" id="contact">
+      <div class="contact-copy"><p class="eyebrow">WE'D LOVE TO HEAR FROM YOU</p><h2>Questions? Let's talk.</h2><p class="muted">Ask us about Samsung Galaxy phones, HP and Toshiba laptops, chargers, cables, power banks, storage, audio products, and other electronics accessories.</p><div class="contact-detail"><span>✉</span><div><strong>Email</strong><p><a href="mailto:yitealem7@gmail.com">yitealem7@gmail.com</a></p></div></div><div class="contact-detail"><span>☎</span><div><strong>Phone</strong><p><a href="tel:+251937571832">0937 571 832</a> · <a href="tel:095025159">095025159</a></p></div></div><div class="contact-detail"><span>◷</span><div><strong>Products</strong><p>Smartphones · Laptops · Chargers · Cables · Audio · Accessories</p></div></div></div>
+      <form class="contact-form" id="contactForm">
+        <label>Your name<input name="name" type="text" placeholder="Enter your name" required maxlength="80"></label>
+        <label>Email address<input name="email" type="email" placeholder="you@example.com" required maxlength="120"></label>
+        <label>Your message<textarea name="message" placeholder="How can we help?" rows="4" required maxlength="1000"></textarea></label>
+        <button class="button button-primary" type="submit">Send message →</button>
+        <p class="form-message" id="formMessage" role="status"></p>
+      </form>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <a class="brand footer-brand" href="#home"><span class="brand-mark"><span>Y</span><i>✦</i></span><span>Yite <strong>Electronics</strong><small>TECH FOR EVERY DAY</small></span></a>
+    <p>© <span id="year"></span> Yite Electronics Store. Smart devices, laptops & accessories.</p>
+    <a href="#home">Back to top ↑</a>
+  </footer>
+
+  <div class="cart-overlay" id="cartOverlay" hidden>
+    <button class="overlay-backdrop" id="closeCartBackdrop" aria-label="Close shopping cart"></button>
+    <aside class="cart-drawer" role="dialog" aria-modal="true" aria-labelledby="cartTitle">
+      <div class="cart-heading"><div><p class="eyebrow">YOUR SELECTION</p><h2 id="cartTitle">Shopping cart</h2></div><button class="icon-button" id="closeCart" aria-label="Close cart">✕</button></div>
+      <div class="cart-items" id="cartItems"></div>
+      <div class="cart-bottom"><div class="cart-total"><span>Total</span><strong id="cartTotal">ETB 0</strong></div><p class="cart-note">All prices are sample estimates, not confirmed live prices. Confirm the exact model, current price and stock with Yite Electronics before ordering.</p><button class="button button-primary checkout-button" id="checkoutButton">Continue to checkout</button><button class="clear-cart" id="clearCart">Clear cart</button></div>
+    </aside>
+  </div>
+  <div class="delivery-overlay" id="deliveryOverlay" hidden>
+    <button class="overlay-backdrop" id="closeDeliveryBackdrop" aria-label="Close delivery form"></button>
+    <section class="delivery-dialog" role="dialog" aria-modal="true" aria-labelledby="deliveryTitle">
+      <div class="cart-heading"><div><p class="eyebrow">HOME DELIVERY</p><h2 id="deliveryTitle">Delivery details</h2></div><button class="icon-button" id="closeDelivery" aria-label="Close delivery form">✕</button></div>
+      <p class="delivery-intro">Fill in your details to prepare your order. Your order will open in WhatsApp for you to review and send.</p>
+      <form id="deliveryForm" class="delivery-form">
+        <label>Full name<input name="customerName" required maxlength="90" autocomplete="name" placeholder="Your full name"></label>
+        <label>Phone number<input name="customerPhone" required maxlength="25" autocomplete="tel" placeholder="09XXXXXXXX" inputmode="tel"></label>
+        <label>Delivery address<input name="deliveryAddress" required maxlength="220" autocomplete="street-address" placeholder="Area, street, building or landmark"></label>
+        <label>City / area<input name="deliveryCity" required maxlength="100" placeholder="e.g. Addis Ababa"></label>
+        <label>Payment preference<select name="paymentMethod" required><option value="Cash on delivery">Cash on delivery (confirm with store)</option><option value="Confirm payment options with store">Ask store about payment options</option></select></label>
+        <label>Extra instructions (optional)<textarea name="deliveryNotes" rows="2" maxlength="400" placeholder="Landmark, preferred time, etc."></textarea></label>
+        <div class="delivery-total"><span>Cart subtotal (sample prices)</span><strong id="deliveryTotal">ETB 0</strong></div>
+        <p class="cart-note">Prices and delivery fees must be confirmed by the store. This website does not collect payments.</p>
+        <button class="button button-primary" type="submit">Prepare WhatsApp order ↗</button>
+        <p id="deliveryMessage" class="form-message" role="status"></p>
+      </form>
+    </section>
+  </div>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+</body>
+</html>
