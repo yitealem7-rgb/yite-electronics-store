@@ -1,4 +1,4 @@
-const products = [
+let products = [
   // Smartphone catalogue — sample prices only; confirm model, storage and stock before purchase.
   {id:1,name:"Samsung Galaxy A05",category:"Phones",price:8999,description:"Everyday Samsung smartphone. Ask about storage and color options.",emoji:"📱",bg:"#e7edff",tag:"Samsung"},
   {id:2,name:"Samsung Galaxy A13",category:"Phones",price:10999,description:"Galaxy A-series phone for everyday calls, apps and photos.",emoji:"📱",bg:"#e8f5f2",tag:"Samsung"},
@@ -277,7 +277,7 @@ document.getElementById("closeDeliveryBackdrop").addEventListener("click", close
 document.addEventListener("keydown", event => {
   if (event.key === "Escape" && !deliveryOverlay.hidden) closeDeliveryForm();
 });
-deliveryForm.addEventListener("submit", event => {
+deliveryForm.addEventListener("submit", async event => {
   event.preventDefault();
   if (cartQuantity() === 0) {
     closeDeliveryForm();
@@ -285,8 +285,9 @@ deliveryForm.addEventListener("submit", event => {
     return;
   }
   const form = event.currentTarget;
+  const submitButton = form.querySelector('button[type="submit"]');
   const value = name => String(form.elements[name].value || "").trim();
-  const orderLines = Object.entries(state.cart).map(([id, qty]) => {
+  let orderLines = Object.entries(state.cart).map(([id, qty]) => {
     const product = products.find(item => item.id === Number(id));
     return product ? `- ${product.name} x${qty}: ${money(product.price * qty)}` : "";
   }).filter(Boolean);
@@ -294,23 +295,63 @@ deliveryForm.addEventListener("submit", event => {
     const product = products.find(item => item.id === Number(id));
     return sum + (product ? product.price * qty : 0);
   }, 0);
+  const customer = {
+    customerName: value("customerName"), customerPhone: value("customerPhone"),
+    deliveryAddress: value("deliveryAddress"), deliveryCity: value("deliveryCity"),
+    paymentMethod: value("paymentMethod"), deliveryNotes: value("deliveryNotes"),
+    items: Object.entries(state.cart).map(([id, quantity]) => ({ id:Number(id), quantity }))
+  };
+  // Open the tab during the user gesture so browser popup blockers are less likely to stop it.
+  const popup = window.open("about:blank", "_blank");
+  if (popup) {
+    try { popup.document.write('<p style="font-family:system-ui;padding:24px">Saving your Yite Electronics order request…</p>'); popup.document.close(); } catch {}
+  }
+  submitButton.disabled = true;
+  submitButton.textContent = "Saving order…";
+  const status = document.getElementById("deliveryMessage");
+  status.textContent = "Saving your order request securely…";
+  let savedOrder = null;
+  let saveError = "";
+  try {
+    const response = await fetch("/api/orders", {
+      method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify(customer)
+    });
+    const result = await response.json();
+    if (!response.ok) throw new Error(result.error || "Order could not be saved");
+    savedOrder = result;
+    if (Array.isArray(result.items)) orderLines = result.items.map(item => `- ${item.name} x${item.quantity}: ${money(item.lineTotal)}`);
+  } catch (error) {
+    saveError = error.message || "The store server is unavailable";
+  } finally {
+    submitButton.disabled = false;
+    submitButton.textContent = "Prepare WhatsApp order ↗";
+  }
   const message = [
-    "Hello Yite Electronics! I would like to request a home-delivery order.", "",
-    "CUSTOMER DETAILS", `Name: ${value("customerName")}`, `Phone: ${value("customerPhone")}`,
-    `Delivery address: ${value("deliveryAddress")}`, `City/area: ${value("deliveryCity")}`,
-    `Payment preference: ${value("paymentMethod")}`,
-    value("deliveryNotes") ? `Extra instructions: ${value("deliveryNotes")}` : "",
-    "", "ORDER ITEMS", ...orderLines, "", `Estimated subtotal: ${money(subtotal)}`,
+    "Hello Yite Electronics! I would like to request a home-delivery order.",
+    savedOrder ? `Order reference: ${savedOrder.orderNumber}` : "Order reference: not saved online — please confirm with the store.", "",
+    "CUSTOMER DETAILS", `Name: ${customer.customerName}`, `Phone: ${customer.customerPhone}`,
+    `Delivery address: ${customer.deliveryAddress}`, `City/area: ${customer.deliveryCity}`,
+    `Payment preference: ${customer.paymentMethod}`,
+    customer.deliveryNotes ? `Extra instructions: ${customer.deliveryNotes}` : "",
+    "", "ORDER ITEMS", ...orderLines, "",
+    `Estimated subtotal: ${money(savedOrder ? savedOrder.subtotal : subtotal)}`,
     "Please confirm stock, final prices, delivery fee and delivery time before I pay."
   ].filter(line => line !== undefined).join("\n");
-  // Opens a prepared message; the customer reviews and sends it themselves.
   const whatsappUrl = `https://wa.me/251937571832?text=${encodeURIComponent(message)}`;
-  const popup = window.open(whatsappUrl, "_blank");
-  if (!popup) {
-    document.getElementById("deliveryMessage").textContent = "Your browser blocked the WhatsApp window. Please allow pop-ups, or copy the order details and contact the store by phone.";
+  if (popup && !popup.closed) popup.location.href = whatsappUrl;
+  else {
+    status.textContent = `WhatsApp was blocked. ${savedOrder ? `Your request was saved as ${savedOrder.orderNumber}.` : `The order was not saved online (${saveError}).`} Please allow pop-ups or contact the store directly.`;
     return;
   }
-  document.getElementById("deliveryMessage").textContent = "WhatsApp opened with your order details. Review and send the message to request delivery.";
+  if (savedOrder) {
+    status.textContent = `Order request saved! Reference: ${savedOrder.orderNumber}. WhatsApp opened so you can review and send it. The store still needs to confirm availability, price and delivery.`;
+    state.cart = {};
+    saveCart();
+    renderCart();
+    renderProducts();
+  } else {
+    status.textContent = `WhatsApp opened, but the order was NOT saved in the database: ${saveError}. Keep this message and contact the store to confirm your request.`;
+  }
 });
 
 document.getElementById("contactForm").addEventListener("submit", event => {
@@ -338,3 +379,16 @@ mainNav.querySelectorAll("a").forEach(link => link.addEventListener("click", () 
 document.getElementById("year").textContent = new Date().getFullYear();
 renderProducts();
 renderCart();
+// When served by server.js, the database is the source of truth for active products and prices.
+fetch("/api/products").then(response => {
+  if (!response.ok) throw new Error("Catalog API unavailable");
+  return response.json();
+}).then(data => {
+  if (Array.isArray(data.products)) {
+    products = data.products.map(p => ({ ...p, bg:p.bg || "#f2eaff", stock:p.stock ?? null }));
+    state.cart = Object.fromEntries(Object.entries(state.cart).filter(([id]) => products.some(p => p.id === Number(id))));
+    saveCart(); renderProducts(); renderCart();
+  }
+}).catch(() => {
+  // Keep the bundled sample catalogue when opening the HTML directly without the API server.
+});
