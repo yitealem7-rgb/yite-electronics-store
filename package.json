@@ -1,8 +1,0 @@
-{
-  "name": "yite-electronics-store",
-  "version": "1.0.0",
-  "private": true,
-  "description": "Yite Electronics Store frontend and SQLite-backed order/product API",
-  "scripts": { "start": "node server.js" },
-  "engines": { "node": ">=22.5.0" }
-}
